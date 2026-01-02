@@ -1,30 +1,503 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Direct WhatsApp</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-<script type="importmap">
-{
-  "imports": {
-    "rxjs": "https://esm.sh/rxjs@^7.8.2?conditions=es2015",
-    "rxjs/operators": "https://esm.sh/rxjs@^7.8.2/operators?conditions=es2015",
-    "rxjs/ajax": "https://esm.sh/rxjs@^7.8.2/ajax?conditions=es2015",
-    "rxjs/webSocket": "https://esm.sh/rxjs@^7.8.2/webSocket?conditions=es2015",
-    "rxjs/testing": "https://esm.sh/rxjs@^7.8.2/testing?conditions=es2015",
-    "rxjs/fetch": "https://esm.sh/rxjs@^7.8.2/fetch?conditions=es2015",
-    "@angular/compiler": "https://esm.sh/@angular/compiler@^21.0.6?external=rxjs",
-    "@angular/platform-browser": "https://esm.sh/@angular/platform-browser@^21.0.6?external=rxjs",
-    "@angular/core": "https://esm.sh/@angular/core@^21.0.6?external=rxjs",
-    "@angular/common": "https://esm.sh/@angular/common@^21.0.6?external=rxjs"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>Direct WhatsApp - Message Without Saving Number</title>
+    <meta name="description" content="Send WhatsApp messages without saving phone number. Secure, Fast & Privacy Focused. Tool by Best247 Team.">
+    <meta name="keywords" content="whatsapp direct, message without saving number, send whatsapp online, privacy policy, contact us, wa me link">
+    <meta name="author" content="Best247 Team">
+    
+    <meta property="og:title" content="Direct WhatsApp - Number Save Kiye Bina Message Bhejein">
+    <meta property="og:description" content="Kisi ka bhi number save karne ki zaroorat nahi. Bas number dalo aur chat shuru karo.">
+    <meta property="og:type" content="website">
+
+    <style>
+        /* LAYOUT & DESIGN */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #dcf8c6 0%, #ffffff 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: #333;
+            -webkit-overflow-scrolling: touch; 
+        }
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Language Switcher */
+        .lang-switch {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        .lang-switch select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+            background: #f9f9f9;
+            cursor: pointer;
+            color: #333;
+        }
+
+        h1 {
+            color: #128C7E;
+            margin-bottom: 5px;
+            font-size: 24px;
+            margin-top: 15px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #075E54;
+        }
+        
+        select, input, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus {
+            border-color: #25D366;
+            outline: none;
+        }
+        
+        /* Buttons */
+        .btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn:hover {
+            background-color: #128C7E;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* HISTORY SECTION STYLE */
+        .history-section {
+            margin-top: 25px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            display: none;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .history-header h3 {
+            font-size: 16px;
+            color: #075E54;
+            margin: 0;
+        }
+        .clear-btn {
+            font-size: 12px;
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .history-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .history-item:hover {
+            background: #e8f5e9;
+            border-color: #25D366;
+        }
+        .history-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .history-phone {
+            font-weight: bold;
+            color: #333;
+            font-size: 15px;
+        }
+        .history-msg-preview {
+            font-size: 12px;
+            color: #777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        .history-action {
+            font-size: 11px;
+            color: #25D366;
+            font-weight: bold;
+        }
+        
+        /* INFO SECTIONS */
+        .info-section {
+            margin-top: 30px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .info-section h3 {
+            color: #075E54;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .info-section ul {
+            padding-left: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+        .info-section li {
+            margin-bottom: 8px;
+        }
+        
+        /* FOOTER */
+        .footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #888;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .footer a {
+            color: #128C7E;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-green-100 to-white flex justify-center items-start min-h-screen p-4">
-  <app-root></app-root>
+<body>
+
+<div class="container">
+    
+    <div class="lang-switch">
+        <select id="languageSelect" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="hi">हिंदी (Hindi)</option>
+        </select>
+    </div>
+
+    <h1 id="txt_title">Direct WhatsApp</h1>
+    <p id="txt_desc">Send WhatsApp messages without saving phone number. Secure & Fast.</p>
+
+    <div class="input-group">
+        <label id="lbl_country">Country Code</label>
+        <select id="countryCode">
+            <option value="91" selected>🇮🇳 India (+91)</option>
+            <option value="1">🇺🇸 USA (+1)</option>
+            <option value="44">🇬🇧 UK (+44)</option>
+            <option value="92">🇵🇰 Pakistan (+92)</option>
+            <option value="880">🇧🇩 Bangladesh (+880)</option>
+            <option value="971">🇦🇪 UAE (+971)</option>
+            <option value="966">🇸🇦 Saudi Arabia (+966)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label id="lbl_phone">Phone Number</label>
+        <input type="tel" id="phoneNumber" placeholder="Enter mobile number" inputmode="numeric" pattern="[0-9]*" required>
+    </div>
+
+    <div class="input-group">
+        <label id="lbl_msg">Message (Optional)</label>
+        <textarea id="message" rows="3" placeholder="Type your message here..."></textarea>
+    </div>
+
+    <button class="btn" onclick="openWhatsApp()" id="btn_send">🚀 Chat on WhatsApp</button>
+
+    <div id="historySection" class="history-section">
+        <div class="history-header">
+            <h3 id="txt_history_title">🕒 Recent History</h3>
+            <button class="clear-btn" onclick="clearHistory()" id="btn_clear">Clear All</button>
+        </div>
+        <ul id="historyList" class="history-list">
+            </ul>
+    </div>
+
+    <div class="info-section">
+        <h3 id="txt_how_title">📌 How to Use</h3>
+        <ul id="list_how">
+            <li>Select <strong>Country Code</strong> first.</li>
+            <li>Enter the <strong>Phone Number</strong> you want to message.</li>
+            <li>Type a message (Optional).</li>
+            <li>Click <strong>"Chat on WhatsApp"</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h3 id="txt_privacy_title">🔒 Privacy Policy</h3>
+        <p id="txt_privacy_desc">Your privacy is important to us:</p>
+        <ul id="list_privacy">
+            <li><strong>No Data Saved:</strong> We do not store your number or message.</li>
+            <li><strong>Direct Connection:</strong> Uses official WhatsApp API.</li>
+            <li><strong>Safe & Secure:</strong> 100% Client-side secure tool.</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p id="txt_contact">Contact Us / Support:</p>
+        <p>📧 Email: <a href="mailto:Best247team@Gmail.com">Best247team@Gmail.com</a></p>
+        <p style="margin-top:10px;">&copy; 2026 Direct WhatsApp Tool. All rights reserved.</p>
+    </div>
+</div>
+
+<script>
+    // LANGUAGE DATA
+    const translations = {
+        en: {
+            title: "Direct WhatsApp",
+            desc: "Send WhatsApp messages without saving phone number. Secure & Fast.",
+            lbl_country: "Country Code",
+            lbl_phone: "Phone Number",
+            ph_phone: "Enter mobile number",
+            lbl_msg: "Message (Optional)",
+            ph_msg: "Type your message here...",
+            btn_send: "🚀 Chat on WhatsApp",
+            history_title: "🕒 Recent History",
+            btn_clear: "Clear All",
+            how_title: "📌 How to Use",
+            how_list: `
+                <li>Select <strong>Country Code</strong> first.</li>
+                <li>Enter the <strong>Phone Number</strong> you want to message.</li>
+                <li>Type a message (Optional).</li>
+                <li>Click <strong>"Chat on WhatsApp"</strong>.</li>
+            `,
+            privacy_title: "🔒 Privacy Policy",
+            privacy_desc: "Your privacy is important to us:",
+            privacy_list: `
+                <li><strong>No Data Saved:</strong> We do not store your number or message.</li>
+                <li><strong>Direct Connection:</strong> Uses official WhatsApp API.</li>
+                <li><strong>Safe & Secure:</strong> 100% Client-side secure tool.</li>
+            `,
+            contact: "Contact Us / Support:"
+        },
+        hi: {
+            title: "डायरेक्ट व्हाट्सएप (Direct WhatsApp)",
+            desc: "बिना नंबर सेव किए व्हाट्सएप मैसेज भेजें। सुरक्षित और तेज।",
+            lbl_country: "कंट्री कोड (Country Code)",
+            lbl_phone: "फ़ोन नंबर (Phone Number)",
+            ph_phone: "मोबाइल नंबर यहाँ लिखें",
+            lbl_msg: "मैसेज (वैकल्पिक)",
+            ph_msg: "अपना संदेश यहाँ लिखें...",
+            btn_send: "🚀 व्हाट्सएप पर चैट करें",
+            history_title: "🕒 पिछला इतिहास (Recent History)",
+            btn_clear: "इतिहास मिटाएं",
+            how_title: "📌 कैसे उपयोग करें (How to Use)",
+            how_list: `
+                <li>सबसे पहले <strong>Country Code</strong> चुनें।</li>
+                <li>वह <strong>Phone Number</strong> लिखें जिसे मैसेज करना है।</li>
+                <li>मैसेज टाइप करें (चाहे तो खाली छोड़ दें)।</li>
+                <li><strong>"व्हाट्सएप पर चैट करें"</strong> बटन दबाएं।</li>
+            `,
+            privacy_title: "🔒 गोपनीयता नीति (Privacy Policy)",
+            privacy_desc: "आपकी गोपनीयता हमारे लिए महत्वपूर्ण है:",
+            privacy_list: `
+                <li><strong>कोई डेटा सेव नहीं:</strong> हम आपका नंबर या मैसेज सेव नहीं करते।</li>
+                <li><strong>डायरेक्ट कनेक्शन:</strong> यह आधिकारिक व्हाट्सएप API का उपयोग करता है।</li>
+                <li><strong>सुरक्षित:</strong> यह वेबसाइट पूरी तरह सुरक्षित है।</li>
+            `,
+            contact: "संपर्क करें (Contact Us):"
+        }
+    };
+
+    function changeLanguage() {
+        const lang = document.getElementById("languageSelect").value;
+        const t = translations[lang];
+
+        document.getElementById("txt_title").innerText = t.title;
+        document.getElementById("txt_desc").innerText = t.desc;
+        document.getElementById("lbl_country").innerText = t.lbl_country;
+        document.getElementById("lbl_phone").innerText = t.lbl_phone;
+        document.getElementById("phoneNumber").placeholder = t.ph_phone;
+        document.getElementById("lbl_msg").innerText = t.lbl_msg;
+        document.getElementById("message").placeholder = t.ph_msg;
+        document.getElementById("btn_send").innerText = t.btn_send;
+        
+        document.getElementById("txt_history_title").innerText = t.history_title;
+        document.getElementById("btn_clear").innerText = t.btn_clear;
+
+        document.getElementById("txt_how_title").innerText = t.how_title;
+        document.getElementById("list_how").innerHTML = t.how_list;
+        
+        document.getElementById("txt_privacy_title").innerText = t.privacy_title;
+        document.getElementById("txt_privacy_desc").innerText = t.privacy_desc;
+        document.getElementById("list_privacy").innerHTML = t.privacy_list;
+        
+        document.getElementById("txt_contact").innerText = t.contact;
+    }
+
+    // --- HISTORY LOGIC UPDATED ---
+    
+    window.onload = function() {
+        loadHistory();
+    };
+
+    // Save Number AND Message
+    function saveToHistory(phone, code, msg) {
+        let history = JSON.parse(localStorage.getItem('wa_history')) || [];
+        let fullNumber = "+" + code + " " + phone;
+
+        // Remove duplicates (same number) to move it to top
+        history = history.filter(item => item.number !== fullNumber);
+        
+        // Add new item with Message
+        history.unshift({ 
+            number: fullNumber, 
+            rawPhone: phone, 
+            rawCode: code,
+            rawMsg: msg // Message bhi save kiya
+        });
+        
+        // Keep only last 5
+        if(history.length > 5) history.pop();
+        
+        localStorage.setItem('wa_history', JSON.stringify(history));
+        loadHistory();
+    }
+
+    function loadHistory() {
+        let history = JSON.parse(localStorage.getItem('wa_history')) || [];
+        let list = document.getElementById("historyList");
+        let section = document.getElementById("historySection");
+        
+        list.innerHTML = "";
+        
+        if (history.length === 0) {
+            section.style.display = "none";
+            return;
+        }
+        
+        section.style.display = "block";
+        
+        history.forEach(item => {
+            let li = document.createElement("li");
+            li.className = "history-item";
+            
+            // Show Number and Message Preview
+            let msgPreview = item.rawMsg ? item.rawMsg : "No message";
+            
+            li.innerHTML = `
+                <div class="history-content">
+                    <span class="history-phone">${item.number}</span>
+                    <span class="history-msg-preview">${msgPreview}</span>
+                </div>
+                <span class="history-action">Reuse ↺</span>
+            `;
+            
+            // Click to Auto-Fill everything
+            li.onclick = function() {
+                document.getElementById("countryCode").value = item.rawCode;
+                document.getElementById("phoneNumber").value = item.rawPhone;
+                document.getElementById("message").value = item.rawMsg || ""; // Message bhi fill hoga
+                
+                // Scroll to top
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            };
+            
+            list.appendChild(li);
+        });
+    }
+
+    function clearHistory() {
+        if(confirm("Are you sure you want to clear history?")) {
+            localStorage.removeItem('wa_history');
+            loadHistory();
+        }
+    }
+
+    // --- MAIN FUNCTION ---
+    function openWhatsApp() {
+        var code = document.getElementById("countryCode").value;
+        var phone = document.getElementById("phoneNumber").value;
+        var msg = document.getElementById("message").value;
+
+        // Error Solving
+        phone = phone.replace(/\D/g, ''); 
+        phone = phone.replace(/^0+/, '');
+
+        if (phone === "") {
+            alert("Please enter a valid Mobile Number!");
+            return;
+        }
+        
+        if (phone.length < 5) {
+            alert("Number seems too short. Please check.");
+            return;
+        }
+
+        // SAVE TO HISTORY (With Message)
+        saveToHistory(phone, code, msg);
+
+        var url = "https://wa.me/" + code + phone + "?text=" + encodeURIComponent(msg);
+        window.open(url, '_blank');
+    }
+</script>
+
 </body>
 </html>
